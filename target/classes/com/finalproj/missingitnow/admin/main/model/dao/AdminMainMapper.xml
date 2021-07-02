@@ -94,17 +94,17 @@
                COUNT(*)
 	      FROM TBL_QNA A
 	</select>
-	<select id="selectTotalAnsweredCount" resultType="_int">
+	<select id="selectTotalUserQuestionCount" resultType="_int">
 	    SELECT
                COUNT(*)
 	      FROM TBL_QNA A
-	     WHERE A.QNA_REPLY_CHK = 'Y'
+	     WHERE SUBSTR(A.USER_NO, 0, 4) = 'USER'
 	</select>
-	<select id="selectTotalNonAnswerCount" resultType="_int">
+	<select id="selectTotalCorpUserQuestionCount" resultType="_int">
 	    SELECT
                COUNT(*)
 	      FROM TBL_QNA A
-	     WHERE A.QNA_REPLY_CHK = 'N'
+	     WHERE SUBSTR(A.USER_NO, 0, 4) = 'CORP'
 	</select>
 	<select id="selectTotalNonAnswerUserQuestionCount" resultType="_int">
 	    SELECT

@@ -1,6 +1,6 @@
 <%@ page language="java" contentType="text/html; charset=UTF-8"
     pageEncoding="UTF-8"%>
-    <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
 <!DOCTYPE html>
 <html>
 
@@ -10,7 +10,9 @@
     <link rel="stylesheet" href="${ pageContext.servletContext.contextPath }/resources/css/header.css">
     <link rel="stylesheet" href="${ pageContext.servletContext.contextPath }/resources/css/reset.css">
     <script src="/missingitnow/resources/js/member/main.js"></script>
-    
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js"></script>
 </head>
 
 <body>
@@ -239,6 +241,7 @@
             	
         </div>
     </header>
+    <div id="msgStack" style="position: fixed; right: 0px; bottom: 0px;"></div>
     <div class="space"></div>
     <!-- 검색바 엔진 구현 -->
    <script>
@@ -345,5 +348,45 @@
 			
 		}
 	</script>
+	<!-- sockJS -->
+<script type="text/javascript"
+	src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.1.5/sockjs.min.js"></script>
+<script>
+	// 전역변수 설정
+	var websocket = null;
+	var wsUri = "ws://localhost:8888/missingitnow/qnaresponse/websocket";
+	$(document).ready(function(){
+		
+		send_message();
+		
+	});
+	
+	function send_message(){
+		
+	    // 웹소켓 연결
+	    websocket = new WebSocket(wsUri);
+	
+        websocket.onmessage = function(evt) {
+
+            onMessage(evt);
+
+        };
+
+	};
+	
+	// toast생성 및 추가
+	function onMessage(evt){
+	    var data = evt.data;
+	    // toast
+	    let toast = "<div class='toast' role='alert' aria-live='assertive' aria-atomic='true'>";
+	    toast += "<div class='toast-header'><i class='fas fa-bell mr-2'></i><strong class='mr-auto'>알림</strong>";
+	    toast += "<small class='text-muted'>just now</small><button type='button' class='ml-2 mb-1 close' data-dismiss='toast' aria-label='Close'>";
+	    toast += "<span aria-hidden='true'>&times;</span></button>";
+	    toast += "</div><div class='toast-body'>" + data + "</div></div>";
+	    $("#msgStack").append(toast);   // msgStack div에 생성한 toast 추가
+	    $(".toast").toast({"animation": true, "autohide": false});
+	    $('.toast').toast('show');
+	};	
+</script>
 </body>
 </html>

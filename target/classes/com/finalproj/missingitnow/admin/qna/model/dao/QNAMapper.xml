@@ -403,7 +403,9 @@
 	           A.QNA_NO
 	         , B.USER_NO
 	         , B.USER_NAME
-	         , C.CORP_NAME	
+	         , B.USER_ID
+	         , C.CORP_NAME
+	         , C.CORP_ID
 	         , A.QNA_TITLE
 	         , A.QNA_DETAILS
 	         , A.QNA_DATE

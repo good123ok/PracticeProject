@@ -72,4 +72,43 @@
         <p class="headerTitle">시스템 관리자 센터</p>
     </div>
 </body>
+<script>
+var websocket = null;
+var wsUri = "ws://localhost:8888/missingitnow/qnaresponse/websocket";
+$(document).ready(function(){
+	
+	send_message();
+	
+});
+
+function send_message(){
+	
+
+    // 웹소켓 연결
+    websocket = new WebSocket(wsUri);
+
+    /* // 데이터를 전달 받았을때 
+    websocket.onopen = function(evt) {
+
+        onOpen(evt);
+
+    }; */
+    
+    console.log('send_message()함수 실행');
+    console.log(websocket);
+
+    websocket.onmessage = function(evt) {
+
+        onMessage(evt);
+
+    };
+
+    /* websocket.onerror = function(evt) {
+
+        onError(evt);
+
+    }; */
+
+};
+</script>
 </html>

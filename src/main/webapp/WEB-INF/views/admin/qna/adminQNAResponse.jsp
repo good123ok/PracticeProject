@@ -276,9 +276,10 @@
         <br>
 
         <div class="system-qnaDetail-form">
-        <form action="${ pageContext.servletContext.contextPath }/admin/qna/response" method="post">
+        <form action="${ pageContext.servletContext.contextPath }/admin/qna/response" method="post" id="qnaResponseRegist">
             <label for="">Q&amp;A 제목</label><br>
             <input type="hidden" name="no" value="${ qna.no }">
+            <input type="hidden" name="userNo" value="${ qna.userNo }">
             <div class="title" style="min-height: 30px; line-height: 30px;">${ qna.title }</div>
             <br>
             <label for="">Q&amp;A 내용</label>
@@ -329,7 +330,7 @@
         	<br>
         	<br>
             <div class="system-qnaDetail-bottom">
-                <input type="submit" id="qnaSubmit" value="작성하기">
+                <input type="button" id="qnaSubmit" value="작성하기">
                 <input type="button" id="cancleButton" value="작성취소">
             </div>
 
@@ -489,7 +490,7 @@
     	
     	
     	$("#qnaSubmit").click(function(){
-          	 if($("#detail").val() == ""){
+          	 if($("#detail").html() == ""){
           		 
           		 alert("응답 내용이 비어있습니다!");
           		 return false;
@@ -511,16 +512,54 @@
          		 originNameArr.push(originName);    
            }) 
            
-   	     	console.log(reNameArr);
+   	     	 console.log(reNameArr);
    	     	 console.log(originNameArr); 
           	 
           	  $("#reName").val(reNameArr);
           	  $("#originName").val(originNameArr); 
           	 
           	  if(reNameArr.length > 0){
-          		$("#communtyRegist").submit();
+          		  
+          	        // notifySend
+          		    let writer = '';
+          		    let target = '';
+          		    let url = '${ pageContext.servletContext.contextPath }/admin/qna/detail?qnaNo=' + '${ qna.no }';
+          		    var corp = '${ qna.corpUser }';
+          		    var user = '${ qna.user }';
+          		    if(corp == ''){
+          		    	
+          		    	writer = '${ qna.user.name }';
+          		    	target = '${ qna.user.id }';
+          		    	
+          		    } else if(user = ''){
+          		    	
+          		    	writer = '${ qna.corpUser.corpName }';
+          		    	target = '${ qna.corpUser.corpId }';
+          		    	
+          		    }
+          		    let title = '${ qna.title }';
+          		  	console.log(target);
+          			console.log(title);
+          			console.log(writer);
+          		    // 전송한 정보를 db에 저장	
+          		    var queryString = $("#qnaResponseRegist").serialize();
+
+          		    $.ajax({
+          		        type: 'post',
+          		        url: '${ pageContext.servletContext.contextPath }/admin/qna/response',
+          		        dataType: 'json',
+          		        data: queryString,
+          		        success: function(data){    // db전송 성공시 실시간 알림 전송
+          		            // 소켓에 전달되는 메시지
+          		            // 위에 기술한 EchoHandler에서 ,(comma)를 이용하여 분리시킨다.
+          		            alert(data.message);
+          		            websocket.send("관리자,"+target+","+title+","+writer+","+url);
+          		        }
+          		    });
+          		  
           	  }else{
           		  alert("사진을 등록해주세요");
+          		  return false;
           	  }
           	  
           	 
@@ -538,7 +577,7 @@
            		var i = $(this).attr("src");
            		var re = i.substring(i.lastIndexOf("/"));
            		
-           		arr.push(re.substring(1));         
+           		arr.push(re.substring(1));
              }) 
              
           console.log(arr);
@@ -581,14 +620,6 @@
                  
 
             })
-            
-            /* $(document).on('click','.detailImg', function() {
-            	
-			     alert('클릭');
-			}) */
-			
-			
-		  
 		
 			var arrImg1 = new Array();
     		

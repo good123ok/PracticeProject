@@ -38,8 +38,8 @@ public class AdminMainServiceImpl implements AdminMainService {
 		
 		// Q&A 관련 데이터 셀렉 
 		datas.put("totalQNACount", mapper.selectTotalQNACount());
-		datas.put("totalAnsweredCount", mapper.selectTotalAnsweredCount());
-		datas.put("totalNonAnswerCount", mapper.selectTotalNonAnswerCount());
+		datas.put("totalUserCount", mapper.selectTotalUserQuestionCount());
+		datas.put("totalCorpUserCount", mapper.selectTotalCorpUserQuestionCount());
 		datas.put("totalNonAnswerUserQuestionCount", mapper.selectTotalNonAnswerUserQuestionCount());
 		datas.put("totalNonAnswerCorpUserQuestionCount", mapper.selectTotalNonAnswerCorpUserQuestionCount());
 		

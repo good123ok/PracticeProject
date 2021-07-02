@@ -7,19 +7,16 @@ public interface AdminMainMapper {
 	int selectTodayRegistUserCount();
 	int selectUnpurchasedUserCount();
 	int selectHighRateRefundUserCount();
-	/* int selectReportedUserCount(); */
 
 	// 기업회원
 	int selectTotalCorpUserCount();
 	int selectUnacceptedCorpUserCount();
 	int selectTodayRegistCorpUserCount();
-	/* int selectReportedCorpUserCount(); */
-	int selectBlackListCorpUserCount();
 
 	// Q&A
 	int selectTotalQNACount();
-	int selectTotalAnsweredCount();
-	int selectTotalNonAnswerCount();
+	int selectTotalUserQuestionCount();
+	int selectTotalCorpUserQuestionCount();
 	int selectTotalNonAnswerUserQuestionCount();
 	int selectTotalNonAnswerCorpUserQuestionCount();
 	
@@ -39,7 +36,6 @@ public interface AdminMainMapper {
 	
 	// 수수료
 	int selectTotalCommission();
-	/* int selectCommissionRate(); */
 	int selectLastMonthCommission();
 	int selectLastWeekCommission();
 	int selectLastDayCommission();

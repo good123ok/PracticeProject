@@ -5,7 +5,9 @@
 	xmlns:context="http://www.springframework.org/schema/context"
 	xmlns:aop="http://www.springframework.org/schema/aop"
 	xmlns:mybatis-spring="http://mybatis.org/schema/mybatis-spring"
-	xsi:schemaLocation="http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
+	xmlns:websocket="http://www.springframework.org/schema/websocket"
+	xsi:schemaLocation="http://www.springframework.org/schema/websocket http://www.springframework.org/schema/websocket/spring-websocket-4.3.xsd
+		http://www.springframework.org/schema/mvc https://www.springframework.org/schema/mvc/spring-mvc.xsd
 		http://mybatis.org/schema/mybatis-spring http://mybatis.org/schema/mybatis-spring-1.2.xsd
 		http://www.springframework.org/schema/beans https://www.springframework.org/schema/beans/spring-beans.xsd
 		http://www.springframework.org/schema/context https://www.springframework.org/schema/context/spring-context.xsd
@@ -55,6 +57,16 @@
         </beans:property>
        
     </beans:bean>
+    
+    <beans:bean id="echoHandler" class="com.finalproj.missingitnow.common.socket.EchoHandler"/>
+    
+	<websocket:handlers>
+	    <websocket:mapping handler="echoHandler" path="/qnaresponse" />
+	    <websocket:handshake-interceptors>
+	        <beans:bean class="org.springframework.web.socket.server.support.HttpSessionHandshakeInterceptor" />
+	    </websocket:handshake-interceptors>	
+	    <websocket:sockjs />
+	</websocket:handlers>
 
     
     <beans:bean id="email"

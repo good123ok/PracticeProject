@@ -101,6 +101,12 @@
             <div class="system-qnaDetail-detail">
             	${ qna.details }
             </div>
+            <br>
+            <label for="">답변 내용</label>
+            <br>
+            <div class="system-qnaDetail-detail">
+            	${ qna.reply }
+            </div>
             <input type="hidden" name="details" value='${ qna.details }'>
             <br>
 	        <div class="system-qnaDetail-bottom" style="border: none;">
@@ -121,13 +127,58 @@
 	});
 	
 	$("#returnButton").click(function(){
-		location.href = "${pageContext.request.contextPath}/admin/qna/list";
+		
+		var corpSession = '${CorpUserSession.corpNo}';
+		console.log(corpSession);
+		if(corpSession == 'ADMIN'){
+			
+			location.href = "${pageContext.request.contextPath}/admin/qna/manage";
+			
+		} else {
+		
+			location.href = "${pageContext.request.contextPath}/admin/qna/list";
+		
+		}
+		
 	});
 	
 	const message = '${ requestScope.message }';
 	if(message != null && message !== '') {
+		
+		if(message == '답변 작성에 성공하셨습니다.'){
+			
+			sendMessage(message);
+			
+		}
+		
 		alert(message);
 	};
+	
+	function sendMessage(message){
+		
+	    let target = modal.find('.modal-body input').val();
+	    let content = modal.find('.modal-body textarea').val();
+	    let url = '${contextPath}/member/notify.do';
+	    // 전송한 정보를 db에 저장	
+	    $.ajax({
+	        type: 'post',
+	        url: '${contextPath}/member/saveNotify.do',
+	        dataType: 'text',
+	        data: {
+	            target: target,
+	            content: content,
+	            type: type,
+	            url: url
+	        },
+	        success: function(){    // db전송 성공시 실시간 알림 전송
+	            // 소켓에 전달되는 메시지
+	            // 위에 기술한 EchoHandler에서 ,(comma)를 이용하여 분리시킨다.
+	            socket.send("관리자,"+target+","+content+","+url);	
+	        }
+	    });
+	    modal.find('.modal-body textarea').val('');	// textarea 초기화
+		
+	}
 </script>
 </body>
 </html>

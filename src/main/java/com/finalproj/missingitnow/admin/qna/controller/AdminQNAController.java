@@ -19,6 +19,7 @@ import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
@@ -29,8 +30,8 @@ import com.finalproj.missingitnow.common.page.PageInfoDTO;
 import com.finalproj.missingitnow.common.page.Pagenation;
 import com.finalproj.missingitnow.common.search.DetailSearchDTO;
 import com.finalproj.missingitnow.common.search.SearchDTO;
-import com.finalproj.missingitnow.member.model.dto.PrivateMemberDTO;
 import com.finalproj.missingitnow.corpMng.model.dto.CorpUserDTO;
+import com.finalproj.missingitnow.member.model.dto.PrivateMemberDTO;
 
 @Controller
 @RequestMapping("/admin/qna")
@@ -243,7 +244,7 @@ public class AdminQNAController {
 	}
 	
 	@PostMapping("/response")
-	public String adminQNAResponse(@ModelAttribute QNADTO qnaDTO, RedirectAttributes rttr) {
+	public @ResponseBody HashMap<String, Object> adminQNAResponse(@ModelAttribute QNADTO qnaDTO, HttpServletRequest request, HttpServletResponse response) throws Exception {
 		
 		String message = null;
 		
@@ -257,15 +258,18 @@ public class AdminQNAController {
 			
 		}
 		
-		rttr.addFlashAttribute("message", message);
+		ObjectMapper mapper = new ObjectMapper();
 		
-		return "redirect:manage";
+		HashMap<String, Object> resMap = new HashMap<String, Object>();
+		
+		resMap.put("message", message);
+		
+		return resMap;
 		
 	}
 	
 	@GetMapping("/detail")
 	public String adminQNADetail(HttpServletRequest request, Model model) {
-		
 		String no = request.getParameter("qnaNo");
 		
 		QNADTO qna = qnaService.selectDetail(no);

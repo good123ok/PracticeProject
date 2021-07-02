@@ -51,7 +51,7 @@
 	</update>
 	<insert id="insertNTC">
 	    INSERT
-	      INTO TBL_QNA A
+	      INTO TBL_NOTICE A
 	    (
           A.NOTICE_NO
         , A.NOTICE_TITLE
