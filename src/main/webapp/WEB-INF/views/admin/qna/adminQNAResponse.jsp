@@ -504,68 +504,50 @@
           	var originNameArr = new Array() ;
          	 $(".detailImg").filter(function(){
          		var reName = $(this).attr("src");
-         		 var originName = $(this).attr("data-filename"); 
+         		var originName = $(this).attr("data-filename"); 
          		var re = reName.substring(reName.lastIndexOf("/"));
          		
-         		
-         		reNameArr.push(re.substring(1));         
-         		 originNameArr.push(originName);    
-           }) 
-           
-   	     	 console.log(reNameArr);
-   	     	 console.log(originNameArr); 
+         		reNameArr.push(re.substring(1));    
+         		originNameArr.push(originName);  
+           })
           	 
           	  $("#reName").val(reNameArr);
           	  $("#originName").val(originNameArr); 
           	 
-          	  if(reNameArr.length > 0){
-          		  
-          	        // notifySend
-          		    let writer = '';
-          		    let target = '';
-          		    let url = '${ pageContext.servletContext.contextPath }/admin/qna/detail?qnaNo=' + '${ qna.no }';
-          		    var corp = '${ qna.corpUser }';
-          		    var user = '${ qna.user }';
-          		    if(corp == ''){
-          		    	
-          		    	writer = '${ qna.user.name }';
-          		    	target = '${ qna.user.id }';
-          		    	
-          		    } else if(user = ''){
-          		    	
-          		    	writer = '${ qna.corpUser.corpName }';
-          		    	target = '${ qna.corpUser.corpId }';
-          		    	
-          		    }
-          		    let title = '${ qna.title }';
-          		  	console.log(target);
-          			console.log(title);
-          			console.log(writer);
-          		    // 전송한 정보를 db에 저장	
-          		    var queryString = $("#qnaResponseRegist").serialize();
+  	          // notifySend
+  		      let writer = '';
+  		      let target = '';
+  		      let url = '${ pageContext.servletContext.contextPath }/admin/qna/detail?qnaNo=' + '${ qna.no }';
+  		      var corp = '${ qna.corpUser }';
+  		      var user = '${ qna.user }';
+  		      if(corp == ''){
+  		    	
+  		    	writer = '${ qna.user.name }';
+  		    	target = '${ qna.user.id }';
+  		    	
+  		      } else if(user = ''){
+  		    	
+  		    	writer = '${ qna.corpUser.corpName }';
+  		    	target = '${ qna.corpUser.corpId }';
+  		    	
+  		      }
+  		      let title = '${ qna.title }';
+  		      // 전송한 정보를 db에 저장	
+  		      var queryString = $("#qnaResponseRegist").serialize();
 
-          		    $.ajax({
-          		        type: 'post',
-          		        url: '${ pageContext.servletContext.contextPath }/admin/qna/response',
-          		        dataType: 'json',
-          		        data: queryString,
-          		        success: function(data){    // db전송 성공시 실시간 알림 전송
-          		            // 소켓에 전달되는 메시지
-          		            // 위에 기술한 EchoHandler에서 ,(comma)를 이용하여 분리시킨다.
-          		            alert(data.message);
-          		            websocket.send("관리자,"+target+","+title+","+writer+","+url);
-          		        }
-          		    });
-          		  
-          	  }else{
-          		  alert("사진을 등록해주세요");
-          		  return false;
-          	  }
-          	  
-          	 
-          	 
-
-           })
+  		      $.ajax({
+  		        type: 'post',
+  		        url: '${ pageContext.servletContext.contextPath }/admin/qna/response',
+  		        dataType: 'json',
+  		        data: queryString,
+  		        success: function(data){    // db전송 성공시 실시간 알림 전송
+  		            // 소켓에 전달되는 메시지
+  		            // 위에 기술한 EchoHandler에서 ,(comma)를 이용하여 분리시킨다.
+  		            alert(data.message);
+  		            websocket.send("관리자,"+target+","+title+","+writer+","+url);
+  		        }
+  		      });
+           });
         
         $("#tt").click(function(){
         	

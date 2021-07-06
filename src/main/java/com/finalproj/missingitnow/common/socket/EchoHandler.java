@@ -1,6 +1,5 @@
 package com.finalproj.missingitnow.common.socket;
 
-import java.util.Date;
 import java.util.Map;
 import java.util.concurrent.ConcurrentHashMap;
 
@@ -50,11 +49,6 @@ public class EchoHandler extends TextWebSocketHandler{
 	
 	}
 	
-	// 로그 메시지
-	private void log(String logmsg) {
-		System.out.println(new Date() + " : " + logmsg);
-	}
-	
 	// 웹소켓에 id 가져오기
     // 접속한 유저의 http세션을 조회하여 id를 얻는 함수
 	private String getMemberId(WebSocketSession session) {
@@ -70,15 +64,8 @@ public class EchoHandler extends TextWebSocketHandler{
 	protected void handleTextMessage(WebSocketSession session, TextMessage message) throws Exception {
 		// 특정 회원에게 보내기
 		String msg = message.getPayload();
-		System.out.println(message);
-		System.out.println(msg);
 		if(msg != null) {
 			String[] strs = msg.split(",");
-			System.out.println(strs[0]);
-			System.out.println(strs[1]);
-			System.out.println(strs[2]);
-			System.out.println(strs[3]);
-			System.out.println(strs[4]);
 			if(strs != null && strs.length == 5) {
 				String sender = strs[0];
 				String target = strs[1]; // m_id 저장
@@ -86,10 +73,9 @@ public class EchoHandler extends TextWebSocketHandler{
 				String writer = strs[3];
 				String url = strs[4];
 				WebSocketSession targetSession = users.get(target);  // 메시지를 받을 세션 조회
-				System.out.println(targetSession);
 				// 현재 로그인중 일 시
 				if(targetSession!=null) {
-					// ex: [관리자] Q&A 답변이 등록되었습니다.
+					// [관리자] Q&A 답변이 등록되었습니다.
 					TextMessage tmpMsg = new TextMessage("<a target='_blank' href='" + url + "'>[<b>" + sender + "</b>] " + writer + "님의 " + title + "게시글에 답변을 달았습니다.</a>" );
 					targetSession.sendMessage(tmpMsg);
 				}
